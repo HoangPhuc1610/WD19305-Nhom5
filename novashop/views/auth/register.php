@@ -23,7 +23,7 @@
                         <form method="POST" action="postregister" class="register-form" id="register-form">
                             <div class="form-group">
                                 <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="name" id="name" placeholder="Your User Name" value="<?= $_POST['name'] ?? ""?>"/>
+                                <input type="text" name="name" id="name" placeholder="Your User Name" value="<?= $_POST['name'] ?? ""?>" />
                             </div>
                             <div class="form-group">
                                 <label for="phone"><i class="zmdi zmdi-phone material-icons-name"></i></label>
@@ -53,13 +53,14 @@
                             <?php }?>                            
                             </div>
                             <div class="form-group form-button">
-                                <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
+                                <input type="submit" name="signup" id="signup" class="form-submit" value="Đăng kí" style="font-family: sans-serif;"/>
                             </div>
                         </form>
                     </div>
                     <div class="signup-image">
                         <figure><img src="public/auth/images/signup-image.jpg" alt="sing up image"></figure>
-                        <a href="<?=$baseurl?>/login" class="signup-image-link">Tôi đã có tài khoản</a>
+                        <a href="<?=$baseurl?>/login" class="signup-image-link" style="font-family: sans-serif;">Tôi đã có tài khoản</a>
+                        <a href="<?=$baseurl?>" class="signup-image-link">Trở về trang chủ</a>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost:3306
--- Thời gian đã tạo: Th10 26, 2024 lúc 09:45 AM
+-- Thời gian đã tạo: Th12 08, 2024 lúc 04:25 PM
 -- Phiên bản máy phục vụ: 8.0.30
 -- Phiên bản PHP: 8.1.10
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `novashop`
+-- Cơ sở dữ liệu: `novashop2`
 --
 
 -- --------------------------------------------------------
@@ -50,16 +50,12 @@ INSERT INTO `categories` (`id`, `name`, `image`) VALUES
 --
 
 CREATE TABLE `orderdetails` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL,
   `product_id` int NOT NULL,
   `price` int NOT NULL,
   `quantity` int NOT NULL,
-  `order_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_orderdetails_orders_order_id` (`order_id`),
-  CONSTRAINT `fk_orderdetails_orders_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE
+  `order_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-
 
 -- --------------------------------------------------------
 
@@ -68,26 +64,14 @@ CREATE TABLE `orderdetails` (
 --
 
 CREATE TABLE `orders` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL,
   `customer` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `phone` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `address` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `user_id` int NOT NULL,
   `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `fk_orders_users_user_id` (`user_id`)
+  `status` int DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-
-
---
--- Đang đổ dữ liệu cho bảng `orders`
---
-
-INSERT INTO `orders` (`id`, `customer`, `phone`, `address`, `user_id`, `create_at`) VALUES
-(9, 'Hung', '2, Lê Thị Kim', '0976385309', 1, '2024-06-26 02:31:11'),
-(10, 'Hung', '2, Lê Thị Kim', '56565756757', 1, '2024-06-26 02:37:14'),
-(11, 'Hung', '2, Lê Thị Kim', '0976385309', 1, '2024-06-26 23:57:40'),
-(12, 'Hung', '2, Lê Thị Kim', '0976385309', 1, '2024-06-26 23:59:32');
 
 -- --------------------------------------------------------
 
@@ -98,7 +82,7 @@ INSERT INTO `orders` (`id`, `customer`, `phone`, `address`, `user_id`, `create_a
 CREATE TABLE `products` (
   `id` int NOT NULL,
   `title` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `description` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `description` varchar(550) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `price` int NOT NULL,
   `sale` int DEFAULT NULL,
   `image` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -113,25 +97,26 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `title`, `description`, `price`, `sale`, `image`, `views`, `detail`, `category_id`, `status`) VALUES
-(24, 'Giày cầu lông Mizuno Gate Sky Plus 3', 'Đặc điểm nổi bật\r\nChất lượng vượt trội: Được làm từ nguyên liệu cao cấp, sản phẩm đảm bảo độ bền và hiệu suất tối ưu.\r\nThiết kế hiện đại: Mang phong cách tinh tế và phù hợp với mọi nhu cầu sử dụng.\r\nTiện ích đa năng: Sản phẩm tích hợp nhiều tính năng, hỗ trợ bạn trong công việc và cuộc sống hằng ngày.\r\n', 1900000, 1800000, 'Giày Cầu Lông Mizuno Wave Claw Neo 2.webp', 0, '                        Đặc điểm nổi bật\r\nChất lượng vượt trội: Được làm từ nguyên liệu cao cấp, sản phẩm đảm bảo độ bền và hiệu suất tối ưu.\r\nThiết kế hiện đại: Mang phong cách tinh tế và phù hợp với mọi nhu cầu sử dụng.\r\nTiện ích đa năng: Sản phẩm tích hợp nhiều tính năng, hỗ trợ bạn trong công việc và cuộc sống hằng ngày.\r\n', 3, 1),
-(25, 'Giày Cầu Lông Mizuno Wave Claw 3', 'Đặc điểm nổi bật\r\nChất lượng vượt trội: Được làm từ nguyên liệu cao cấp, sản phẩm đảm bảo độ bền và hiệu suất tối ưu.\r\nThiết kế hiện đại: Mang phong cách tinh tế và phù hợp với mọi nhu cầu sử dụng.\r\nTiện ích đa năng: Sản phẩm tích hợp nhiều tính năng, hỗ trợ bạn trong công việc và cuộc sống hằng ngày.\r\n          ', 235435, NULL, 'Giày cầu lông Mizuno Gate Sky Plus 3.webp', 0, 'Đặc điểm nổi bật\r\nChất lượng vượt trội: Được làm từ nguyên liệu cao cấp, sản phẩm đảm bảo độ bền và hiệu suất tối ưu.\r\nThiết kế hiện đại: Mang phong cách tinh tế và phù hợp với mọi nhu cầu sử dụng.\r\nTiện ích đa năng: Sản phẩm tích hợp nhiều tính năng, hỗ trợ bạn trong công việc và cuộc sống hằng ngày.\r\n        ', 3, 1),
-(26, 'Giày cầu lông Mizuno Wave Claw Neo 3', 'Đặc điểm nổi bật\r\nChất lượng vượt trội: Được làm từ nguyên liệu cao cấp, sản phẩm đảm bảo độ bền và hiệu suất tối ưu.\r\nThiết kế hiện đại: Mang phong cách tinh tế và phù hợp với mọi nhu cầu sử dụng.\r\nTiện ích đa năng: Sản phẩm tích hợp nhiều tính năng, hỗ trợ bạn trong công việc và cuộc sống hằng ngày.\r\n', 15000000, NULL, 'Giày cầu lông Mizuno Wave Claw Neo 3.jpg', 0, 'Đặc điểm nổi bật\r\nChất lượng vượt trội: Được làm từ nguyên liệu cao cấp, sản phẩm đảm bảo độ bền và hiệu suất tối ưu.\r\nThiết kế hiện đại: Mang phong cách tinh tế và phù hợp với mọi nhu cầu sử dụng.\r\nTiện ích đa năng: Sản phẩm tích hợp nhiều tính năng, hỗ trợ bạn trong công việc và cuộc sống hằng ngày.\r\n', 3, 1),
-(27, 'Giày cầu lông Mizuno Wave Fang El 2', 'Đặc điểm nổi bật\r\nChất lượng vượt trội: Được làm từ nguyên liệu cao cấp, sản phẩm đảm bảo độ bền và hiệu suất tối ưu.\r\nThiết kế hiện đại: Mang phong cách tinh tế và phù hợp với mọi nhu cầu sử dụng.\r\nTiện ích đa năng: Sản phẩm tích hợp nhiều tính năng, hỗ trợ bạn trong công việc và cuộc sống hằng ngày.\r\n', 243509, 1, 'Giày cầu lông Mizuno Wave Fang El 2.webp', 0, 'Đặc điểm nổi bật\r\nChất lượng vượt trội: Được làm từ nguyên liệu cao cấp, sản phẩm đảm bảo độ bền và hiệu suất tối ưu.\r\nThiết kế hiện đại: Mang phong cách tinh tế và phù hợp với mọi nhu cầu sử dụng.\r\nTiện ích đa năng: Sản phẩm tích hợp nhiều tính năng, hỗ trợ bạn trong công việc và cuộc sống hằng ngày.\r\n', 3, 1),
-(28, 'Giày Cầu Lông Yonex SHB 88 Dial 3', 'pk', 2290000, NULL, 'Giày Cầu Lông Yonex SHB 88 Dial 3.webp', 65, 'ok', 2, 1),
-(29, 'Giày cầu lông Yonex 65Z3 New', 'ok', 2950000, NULL, 'Giày cầu lông Yonex 65Z3 New.webp', 36, 'ok', 2, 1),
-(30, 'Giày cầu lông Yonex Eclipsion Z Men', 'ok', 2179000, NULL, 'Giày cầu lông Yonex Eclipsion Z Men.jpg', 234, 'ok', 2, 1),
-(31, 'Giày Cầu Lông Yonex Precision 2 ', 'ok', 950000, NULL, 'Giày Cầu Lông Yonex Precision 2.webp', 0, 'ok', 2, 1),
-(32, 'Giày cầu lông Lining AYAU007-4', 'ok', 2500000, NULL, 'Giày cầu lông Lining AYAU007-4.jpg', 0, 'ok', 1, 1),
-(33, 'Giày cầu lông Lining AYAU007-3', 'ok', 2500000, NULL, 'Giày cầu lông Lining AYAU007-3.jpg', 0, '', 1, 1),
-(34, 'Giày cầu lông Lining AYAU007-1', 'ok', 3000000, NULL, 'Giày cầu lông Lining AYAU007-1.jpg', 0, 'k', 1, 1),
-(35, 'Giày cầu lông Lining AYZU015-1', 'ok', 3500000, NULL, 'Giày cầu lông Lining AYZU015-1.webp', 0, 'ok', 1, 1),
-(36, 'Giày cầu lông Lining AYAU007-2', 'ok', 900000, NULL, 'Giày cầu lông Lining AYAU007-2.webp', 0, 'ok', 1, 1),
-(37, 'Giày cầu lông Yonex Comfort Z3 Men', 'ok', 3999999, NULL, 'Giày cầu lông Yonex Comfort Z3 Men.webp', 0, '', 2, 1),
-(38, 'Giày Cầu Lông Yonex SHB 34 LX', 'Giày Cầu Lông Yonex SHB 34 LX', 1670000, NULL, 'Giày Cầu Lông Yonex SHB 34 LX.webp', 0, '', 2, 1),
-(39, 'Giày cầu lông Yonex SHB-02 LX ', 'Giày cầu lông Yonex SHB-02 LX ', 2354600, NULL, 'Giày cầu lông Yonex SHB-02 LX.webp', 0, '', 2, 1),
-(40, 'Giày cầu lông Mizuno Wave Thunderstorm - Đen Trắng Xanh chính hãng', 'ok', 1790000, NULL, 'Giày cầu lông Mizuno Wave Thunderstorm - Đen Trắng Xanh chính hãng.webp', 0, '', 3, 1),
-(41, 'Giày cầu lông Victor Crayon Shinchan A39JRCS 9', '', 2345000, 123213, 'Giày cầu lông Victor Crayon Shinchan A39JRCS 9.webp', 0, '', 4, 1),
-(42, 'Giày cầu lông Victor Crayon Shinchan A39CS - AF', 'ok', 2450000, NULL, 'Giày cầu lông Victor Crayon Shinchan A39CS - AF.webp', 124, 'ok', 4, 1);
+(1, 'Giày cầu lông Mizuno Gate Sky Plus 3', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 1900000, 1800000, 'Giày Cầu Lông Mizuno Wave Claw Neo 2.webp', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 3, 1),
+(2, 'Giày Cầu Lông Mizuno Wave Claw 3', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 235000, NULL, 'Giày cầu lông Mizuno Gate Sky Plus 3.webp', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 3, 1),
+(3, 'Giày cầu lông Mizuno Wave Claw Neo 3', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 15000000, NULL, 'Giày cầu lông Mizuno Wave Claw Neo 3.jpg', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 3, 1),
+(4, 'Giày cầu lông Mizuno Wave Fang El 2', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 250000, 200000, 'Giày cầu lông Mizuno Wave Fang El 2.webp', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 3, 1),
+(5, 'Giày Cầu Lông Yonex SHB 88 Dial 3', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 2290000, NULL, 'Giày Cầu Lông Yonex SHB 88 Dial 3.webp', 65, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 2, 1),
+(6, 'Giày cầu lông Yonex 65Z3 New', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 2950000, NULL, 'Giày cầu lông Yonex 65Z3 New.webp', 36, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 2, 1),
+(7, 'Giày cầu lông Yonex Eclipsion Z Men', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 2179000, NULL, 'Giày cầu lông Yonex Eclipsion Z Men.jpg', 234, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 2, 1),
+(9, 'Giày cầu lông Lining AYAU007-4', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 2500000, NULL, 'Giày cầu lông Lining AYAU007-4.jpg', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 1, 1),
+(10, 'Giày cầu lông Lining AYAU007-3', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 2500000, NULL, 'Giày cầu lông Lining AYAU007-3.jpg', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 1, 1),
+(11, 'Giày cầu lông Lining AYAU007-1', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 3000000, NULL, 'Giày cầu lông Lining AYAU007-1.jpg', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 1, 1),
+(12, 'Giày cầu lông Lining AYZU015-1', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 3500000, NULL, 'Giày cầu lông Lining AYZU015-1.webp', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 1, 1),
+(13, 'Giày cầu lông Lining AYAU007-2', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 900000, NULL, 'Giày cầu lông Lining AYAU007-2.webp', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 1, 1),
+(14, 'Giày cầu lông Yonex Comfort Z3 Men', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 3999999, NULL, 'Giày cầu lông Yonex Comfort Z3 Men.webp', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 2, 1),
+(15, 'Giày Cầu Lông Yonex SHB 34 LX', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 1670000, NULL, 'Giày Cầu Lông Yonex SHB 34 LX.webp', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 2, 1),
+(16, 'Giày cầu lông Yonex SHB-02 LX ', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 2354600, NULL, 'Giày cầu lông Yonex SHB-02 LX.webp', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 2, 1),
+(17, 'Giày cầu lông Mizuno Wave Thunderstorm - Đen Trắng Xanh chính hãng', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 1790000, NULL, 'Giày cầu lông Mizuno Wave Thunderstorm - Đen Trắng Xanh chính hãng.webp', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 3, 1),
+(18, 'Giày cầu lông Victor Crayon Shinchan A39JRCS 9', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 2345000, 1200000, 'Giày cầu lông Victor Crayon Shinchan A39JRCS 9.webp', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 4, 1),
+(19, 'Giày cầu lông Victor Crayon Shinchan A39CS - AF', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 2450000, 1300000, 'Giày cầu lông Victor Crayon Shinchan A39CS - AF.webp', 124, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 4, 1),
+(20, 'Giày Cầu Lông Victor A230 AC - Trắng Chính Hãng', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 1390000, NULL, 'Giày cầu lông Victor A230 AC - Trắng.jpg', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 4, 1),
+(24, 'Giày cầu lông Victor P9200TDF', 'Giày thể thao là loại giày được thiết kế đặc biệt để mang lại sự thoải mái và hỗ trợ cho người dùng trong các hoạt động thể chất như chạy, tập luyện, hoặc chơi thể thao. Với chất liệu bền và đế cao su, giày thể thao giúp bảo vệ đôi chân, tăng cường hiệu suất vận động và giữ cho người dùng luôn thoải mái.', 1350000, NULL, 'Giày cầu lông Victor P9200TDF.webp', 0, 'Giày thể thao được thiết kế với mục đích hỗ trợ tối đa cho các hoạt động thể chất, từ chạy bộ, bóng rổ, cho đến tập gym. Mỗi đôi giày thể thao thường có phần thân bằng vải hoặc da tổng hợp, mang lại độ bền cao và sự thoáng khí, giúp chân luôn khô ráo. Đế giày được làm từ cao su hoặc vật liệu chống trượt, tạo độ bám tốt và giảm thiểu chấn động khi di chuyển. Các công nghệ tiên tiến như đệm EVA, công nghệ chống sốc, và khả năng thấm hút mồ hôi giúp tăng cường sự thoải mái và bảo vệ trong suốt quá trình sử dụng. Bên cạnh đó, thiết kế ôm chân, hỗ trợ cổ chân và linh hoạt trong các chuyển động, giúp người dùng tự tin hơn khi tham gia vào các môn thể thao.', 4, 1);
 
 -- --------------------------------------------------------
 
@@ -154,10 +139,14 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `phone`, `block`, `role_id`) VALUES
-(1, 'admin', 'admin@gmail.com', '7a672068117bd7819d0da88510d0e73e', NULL, NULL, 1),
-(2, 'user1', 'nqh2610@gmail.com', '202cb962ac59075b964b07152d234b70', NULL, NULL, NULL),
-(3, 'user2', 'user2@gmail.com', '202cb962ac59075b964b07152d234b70', NULL, NULL, NULL),
-(6, 'user3', 'user3@gmail.com', '202cb962ac59075b964b07152d234b70', NULL, NULL, NULL);
+(1, 'admin', 'admin@gmail.com', 'e64b78fc3bc91bcbc7dc232ba8ec59e0', NULL, 0, 1),
+(2, 'user1', 'phuc@gmail.com', 'ae0f3d2ec48c9c43f06b755e4ec95820', NULL, 0, NULL),
+(3, 'user2', 'vu@gmail.com', 'e64b78fc3bc91bcbc7dc232ba8ec59e0', NULL, 0, NULL),
+(6, 'user3', 'trieu@gmail.com', 'ae0f3d2ec48c9c43f06b755e4ec95820', NULL, 0, NULL),
+(8, 'Test1', 'huynhquoctrieu58@gmail.com', 'cb7d47e6b8f45a51c7e029080d1b6cac', '0829159778', 0, NULL),
+(9, 'vu            ', 'hvu1436@gmail.com', '7c860ef9e93781f63991c57d15da1afc', '0829159778', 0, NULL),
+(10, 'vu123', 'hvu1435@gmail.com', '7c860ef9e93781f63991c57d15da1afc', '0829159778', 0, NULL),
+(11, 'vu34567890', 'hvu@gmail.com', '7c860ef9e93781f63991c57d15da1afc', '0829159778', 1, NULL);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -205,31 +194,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT cho bảng `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT cho bảng `orderdetails`
 --
 ALTER TABLE `orderdetails`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT cho bảng `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

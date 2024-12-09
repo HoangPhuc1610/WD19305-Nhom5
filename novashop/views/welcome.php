@@ -16,7 +16,7 @@
                                 <div class="p-3" style="max-width: 700px;">
                                     <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Giày Yonex</h1>
                                     <p class="mx-md-5 px-5 animate__animated animate__bounceIn">Giày Yonex được thiết kế chuyên biệt với công nghệ tiên tiến, mang đến sự ổn định, thoải mái và hiệu suất tối ưu cho các môn thể thao như cầu lông và tennis.</p>
-                                    <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="<?=$baseurl?>/shop">Mua ngay</a>
+                                    <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="<?=$baseurl?>/get_cate/2">Mua ngay</a>
                                 </div>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
                                 <div class="p-3" style="max-width: 700px;">
                                     <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Giày Mizuno</h1>
                                     <p class="mx-md-5 px-5 animate__animated animate__bounceIn">Giày Mizuno nổi bật với công nghệ tiên tiến, mang lại sự thoải mái tối đa và hiệu suất vượt trội, là lựa chọn lý tưởng cho các vận động viên và người yêu thích thể thao.</p>
-                                    <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Mua ngay</a>
+                                    <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="<?=$baseurl?>/get_cate/3">Mua ngay</a>
                                 </div>
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                                 <div class="p-3" style="max-width: 700px;">
                                     <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Giày Lining</h1>
                                     <p class="mx-md-5 px-5 animate__animated animate__bounceIn">Giày Li-Ning mang đến sự kết hợp hoàn hảo giữa thiết kế hiện đại và hiệu suất vượt trội, phù hợp cho mọi hoạt động thể thao và thời trang hàng ngày</p>
-                                    <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Mua ngay</a>
+                                    <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="<?=$baseurl?>/get_cate/1">Mua ngay</a>
                                 </div>
                             </div>
                         </div>
@@ -48,8 +48,8 @@
                     <img class="img-fluid" src="public/images/bannergiay4.jpg" alt="">
                     <div class="offer-text">
                         <h6 class="text-white text-uppercase">Giảm giá 20%</h6>
-                        <h3 class="text-white mb-3">Sản phẩm Yonex</h3>
-                        <a href="" class="btn btn-primary">Mua ngay</a>
+                        <h3 class="text-white mb-3" >Sản phẩm Yonex</h3>
+                        <a class="btn btn-primary"  href="<?=$baseurl?>/get_cate/2">Mua ngay</a>
                     </div>
                 </div>
                 <div class="product-offer mb-30" style="height: 200px;">
@@ -57,7 +57,7 @@
                     <div class="offer-text">
                         <h6 class="text-white text-uppercase">Giảm giá 10%</h6>
                         <h3 class="text-white mb-3">Sản phẩm Lining</h3>
-                        <a href="" class="btn btn-primary">Mua ngay</a>
+                        <a href="<?=$baseurl?>/get_cate/1" class="btn btn-primary"  >Mua ngay</a>
                     </div>
                 </div>
             </div>

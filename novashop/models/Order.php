@@ -6,6 +6,37 @@ function getAllOrders($conn) {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+//láy đơn hàng đang chờ xử lý
+function getProcessingOrders($conn) {
+    $sql = "SELECT * FROM orders WHERE status = 1 ORDER BY id DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+//lấy đơn hàng đang vận chuyển
+function getShippingOrders($conn) {
+    $sql = "SELECT * FROM orders WHERE status = 2 ORDER BY id ASC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//lấy đơn hàng đã hủy
+function getCancelledOrders($conn) {
+    $sql = "SELECT * FROM orders WHERE status = 3 ORDER BY id ASC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//lấy đơn hàng đã thanh toán
+function getOrderPayment($conn) {
+    $sql = "SELECT * FROM orders WHERE status = 4 ORDER BY id ASC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
 // Hàm tính tổng số đơn hàng
 function getTotalOrder($conn) {
@@ -17,33 +48,33 @@ function getTotalOrder($conn) {
 }
 
 // Hàm thêm đơn hàng
-function addOrder($name, $phone, $address, $user_id, $create_id) {
-    global $conn;
-    $sql = "INSERT INTO orders (customer, phone, address, user_id, create_id) 
-            VALUES (:name, :phone, :address, :user_id, :create_id)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':name', $name);
-    $stmt->bindParam(':phone', $phone);
-    $stmt->bindParam(':address', $address);
-    $stmt->bindParam(':user_id', $user_id);
-    $stmt->bindParam(':create_id', $create_id);
-    $stmt->execute();
-}
+// function addOrder($name, $phone, $address, $user_id, $create_id) {
+//     global $conn;
+//     $sql = "INSERT INTO orders (customer, phone, address, user_id, create_id) 
+//             VALUES (:name, :phone, :address, :user_id, :create_id)";
+//     $stmt = $conn->prepare($sql);
+//     $stmt->bindParam(':name', $name);
+//     $stmt->bindParam(':phone', $phone);
+//     $stmt->bindParam(':address', $address);
+//     $stmt->bindParam(':user_id', $user_id);
+//     $stmt->bindParam(':create_id', $create_id);
+//     $stmt->execute();
+// }
 
 // Hàm lấy chi tiết đơn hàng
-function getOrderDetails($order_id) {
-    global $conn;
-    try {
-        $sql = "SELECT * FROM orders WHERE id = :order_id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        echo "Lỗi khi lấy thông tin đơn hàng: " . $e->getMessage();
-        return null;
-    }
-}
+// function getOrderDetails($order_id) {
+//     global $conn;
+//     try {
+//         $sql = "SELECT * FROM orders WHERE id = :order_id";
+//         $stmt = $conn->prepare($sql);
+//         $stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
+//         $stmt->execute();
+//         return $stmt->fetch(PDO::FETCH_ASSOC);
+//     } catch (PDOException $e) {
+//         echo "Lỗi khi lấy thông tin đơn hàng: " . $e->getMessage();
+//         return null;
+//     }
+// }
 
 // Hàm lấy tất cả chi tiết đơn hàng
 function getAllOrdersdetails($conn) {
@@ -52,6 +83,9 @@ function getAllOrdersdetails($conn) {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC); // Trả về tất cả các chi tiết đơn hàng
 }
+
+
+
 
 function getUserOrdersdetails($conn, $user_id) {
     $sql = "SELECT 

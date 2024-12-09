@@ -24,9 +24,6 @@ $formattedRevenue = number_format($totalRevenue, 0, ',', '.') . 'đ';
 // Lấy tổng số hóa đơn
 $totalOrder = getTotalOrder($conn);
 
-// Lấy tổng số người dùng 
-$totalUser = getTotalUser($conn); 
-
 // Kiểm tra nếu có yêu cầu POST để cập nhật trạng thái
 if (isset($_POST['update_status'])) {
     $order_id = $_POST['order_id'];
@@ -53,16 +50,6 @@ if (isset($_POST['update_status'])) {
         </div>
     </div>
 
-    <!-- Box Tổng người dùng -->
-    <div class="col-md-3">
-        <div class="card custom-card">
-            <div class="card-header">Tổng người dùng</div>
-            <div class="card-body">
-                <h5 class="card-title"><?= isset($totalUser) ? $totalUser : 0 ?></h5>
-            </div>
-        </div>
-    </div>
-
     <!-- Box Tổng Đơn Hàng -->
     <div class="col-md-3">
         <div class="card custom-card">
@@ -83,10 +70,14 @@ if (isset($_POST['update_status'])) {
         </div>
     </div>
 </div>
-
-
-
-
+<!-- Thanh trạng thái -->
+<div class="ordermenu">
+    <a href="" class="active">Tất cả đơn hàng</a>
+    <a href="<?= $baseurl ?>/orderproces">Đơn hàng đang xử lý</a>
+    <a href="<?= $baseurl ?>/ordertransit">Đơn hàng đang giao</a>
+    <a href="<?= $baseurl ?>/ordercancelled">Đơn hàng đã được hủy</a>
+    <a href="<?= $baseurl ?>/orderpayment">Đơn hàng được thanh toán</a>
+</div>
 <h1>Danh Sách Đơn Hàng</h1>
 <form method="POST">
     <table border="1">
@@ -94,55 +85,78 @@ if (isset($_POST['update_status'])) {
             <th>ID Đơn hàng</th>
             <th>Tên khách hàng</th>
             <th>Tên sản phẩm</th>
-            <th>Số lượng</th>
-            <th>Giá</th>
+            <th>Tổng số lượng</th>
+            <th>Tổng giá</th>
             <th>Ngày đặt</th>
             <th>Trạng thái</th>
         </tr>
-        <?php foreach ($orders as $order) { ?>
-            <?php
+        <?php 
+        // Tạo mảng lưu trữ các đơn hàng đã gộp
+        $mergedOrders = [];
+
+        foreach ($orders as $order) {
             // Lọc chi tiết đơn hàng tương ứng với order_id
             $orderDetailsForCurrentOrder = array_filter($orderdetails, function($orderdetail) use ($order) {
                 return $orderdetail['order_id'] == $order['id'];
             });
+
+            // Nếu chưa có đơn hàng trong mảng mergedOrders, tạo mới
+            if (!isset($mergedOrders[$order['id']])) {
+                $mergedOrders[$order['id']] = [
+                    'customer' => $order['customer'],
+                    'products' => [],
+                    'totalQuantity' => 0,
+                    'totalPrice' => 0,
+                    'date' => $order['create_at'],
+                    'status' => $order['status'],
+                ];
+            }
+
+            // Gộp chi tiết sản phẩm
+            foreach ($orderDetailsForCurrentOrder as $orderdetail) {
+                $title = $orderdetail['title'] ?? 'Không xác định';
+                $quantity = $orderdetail['quantity'] ?? 0;
+                $price = $orderdetail['price'] ?? 0;
+
+                $mergedOrders[$order['id']]['products'][] = "{$title} (x{$quantity})";
+                $mergedOrders[$order['id']]['totalQuantity'] += $quantity;
+                $mergedOrders[$order['id']]['totalPrice'] += $price * $quantity;
+            }
+        }
+
+        // Hiển thị các đơn hàng đã gộp
+        foreach ($mergedOrders as $orderId => $order) {
             ?>
-            <?php foreach ($orderDetailsForCurrentOrder as $orderdetail) : ?>
-                <tr>
-                    <td><?= $order['id']; ?></td>
-                    <td><?= $order['customer']; ?></td>
-                    <td><?= $orderdetail['title']; ?></td>
-                    <td><?= $orderdetail['quantity']; ?></td>
-                    <?php 
-                    if ($orderdetail['quantity'] > 1) {
-                        $total_price = number_format($orderdetail['price'] * $orderdetail['quantity'], 0, ',', '.');
-                        echo "<td>{$total_price}đ</td>";
-                    } else {
-                        $price = number_format($orderdetail['price'], 0, ',', '.');
-                        echo "<td>{$price}đ</td>";
-                    }
-                    ?>
-                    <td><?= date('d-m-Y', strtotime($order['create_at'])); ?></td> <!-- Ngày đặt -->
-                    <td>
-                        <form method="POST">
-                            <select name="status">
-                                <option value="1" <?= $order['status'] == 1 ? 'selected' : ''; ?>>Đơn hàng đang xử lý</option>
-                                <option value="2" <?= $order['status'] == 2 ? 'selected' : ''; ?>>Đơn hàng đang giao</option>
-                                <option value="3" <?= $order['status'] == 3 ? 'selected' : ''; ?>>Đơn hàng đã được hủy</option>
-                                <option value="4" <?= $order['status'] == 4 ? 'selected' : ''; ?>>Đơn hàng được thanh toán</option>
-                            </select>
-                            <input type="hidden" name="order_id" value="<?= $order['id']; ?>" />
-                            <button type="submit" name="update_status">Cập nhật</button>
-                        </form>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        <?php } ?>
+            <tr>
+                <td><?= $orderId; ?></td>
+                <td><?= $order['customer']; ?></td>
+                <td><?= implode("<br>", $order['products']); ?></td>
+                <td><?= $order['totalQuantity']; ?></td>
+                <td><?= number_format($order['totalPrice'], 0, ',', '.'); ?>đ</td>
+                <td><?= date('d-m-Y', strtotime($order['date'])); ?></td>
+                <td>
+                    <form method="POST">
+                        <select name="status">
+                            <option value="1" <?= $order['status'] == 1 ? 'selected' : ''; ?>>Đơn hàng đang xử lý</option>
+                            <option value="2" <?= $order['status'] == 2 ? 'selected' : ''; ?>>Đơn hàng đang giao</option>
+                            <option value="3" <?= $order['status'] == 3 ? 'selected' : ''; ?>>Đơn hàng đã được hủy</option>
+                            <option value="4" <?= $order['status'] == 4 ? 'selected' : ''; ?>>Đơn hàng được thanh toán</option>
+                        </select>
+                        <input type="hidden" name="order_id" value="<?= $orderId; ?>" />
+                        <button type="submit" name="update_status">Cập nhật</button>
+                    </form>
+                </td>
+            </tr>
+            <?php
+        }
+        ?>
     </table>
 </form>
 
+
+
 <?php include "views/layouts/footer-admin.php" ?>
 <style>
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -184,7 +198,7 @@ h1 {
 }
 
 .card-header {
-    background-color: #4CAF50; 
+    background-color: #FFC107; 
     color: white; 
     font-size: 16px;
     font-weight: bold;
@@ -219,7 +233,7 @@ table {
 
 
 th {
-    background-color: #4CAF50;
+    background-color: #FFC107;
     color: white;
     padding: 12px;
     text-align: left;
@@ -267,7 +281,7 @@ select {
 
 button {
     padding: 8px 12px;
-    background-color: #4CAF50;
+    background-color: #FFC107;
     color: white;
     border: none;
     border-radius: 4px;
@@ -276,7 +290,40 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #EEB422;
 }
 
+
+.ordermenu {
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    border: 1px solid #ddd;
+}
+
+
+.ordermenu a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.ordermenu a:hover {
+    background-color: #FFC107;
+    color: white;
+}
+
+.ordermenu a.active {
+    background-color: #FFC107;
+    color: white;
+    pointer-events: none;
+}
 </style>

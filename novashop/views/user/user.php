@@ -154,6 +154,7 @@
         </section>
 
         <?php 
+        //ID của người dùng đang đăng nhập từ phiên làm việc ($_SESSION) và lưu nó vào biến $user_id.
             $user_id = $_SESSION['login']['id'];
             $userdetails = getUserOrdersdetails($conn, $user_id);
         ?>

@@ -11,7 +11,8 @@ switch ($action) {
         $getMizu=getMizu();
         $liningProducts=getLining();
         $victorProducts=getVictor();
-         $getALLOrders=getAllOrders($conn);
+        $getALLOrders=getAllOrders($conn);
+        
         include "views/welcome.php"; 
         break;    
 }

@@ -4,8 +4,8 @@
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="<?=$baseurl?>">Home</a>
-                    <span class="breadcrumb-item active">About</span>
+                    <a class="breadcrumb-item text-dark" href="<?=$baseurl?>">Trang chủ</a>
+                    <span class="breadcrumb-item active">Giới thiệu</span>
                 </nav>
             </div>
         </div>

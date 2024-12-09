@@ -30,9 +30,11 @@ switch ($action) {
                 $errors[] = "Số điện thoại chỉ được 10 số.";
             }
             if (!validateEmail($email)) {
-                $errors[] = "Email phải kết thúc bằng '.com' và không có ký tự gì sau đó.";
+                $errors[] = "Email sai định dạng";
             }
-    
+            
+           
+            
             // **Kiểm tra trùng email**
             $stmt = $conn->prepare("SELECT id FROM users WHERE email = :email AND id != :userId");
             $stmt->bindParam(':email', $email);
@@ -50,8 +52,9 @@ switch ($action) {
                 updateUser($userId, $username, $phone, $email, $address);
                 header("Location: user"); // Chuyển hướng sau khi cập nhật
                 exit();
-            } else {
-                // Hiển thị lỗi
+            } 
+             // Nếu có lỗi, hiển thị thông báo lỗi
+             if (!empty($errors)) {
                 foreach ($errors as $error) {
                     echo "<script>alert('$error');</script>";
                 }

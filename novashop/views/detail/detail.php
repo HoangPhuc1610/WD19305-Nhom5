@@ -96,7 +96,7 @@
                                 <label class="custom-control-label" for="color-2">Trắng</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
-<input type="radio" class="custom-control-input" id="color-3" name="color">
+                                <input type="radio" class="custom-control-input" id="color-3" name="color">
                                 <label class="custom-control-label" for="color-3">Đỏ</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">

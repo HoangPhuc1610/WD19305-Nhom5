@@ -39,8 +39,8 @@ switch ($action) {
         }
         include "views/auth/login.php";
 
-        if ($user["block"] == 1) {
-             echo "<script> alert('Đã bị khóa')</script>";
+        if ($user && isset($user["block"]) && $user["block"] == 1) {
+            echo "<script> alert('Đã bị khóa')</script>";
             exit; // Dừng script tại đây
         }
         

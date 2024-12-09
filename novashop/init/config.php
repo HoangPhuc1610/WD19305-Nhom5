@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname="novashop2";
+$dbname="novashop";
 $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 
 

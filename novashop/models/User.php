@@ -83,15 +83,13 @@ function updateUser($userId, $username, $phone, $email, $address) {
 }
 
 function validateEmail($email) {
-    // Kiểm tra email có kết thúc bằng .com và không có ký tự sau .com
-    if (preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/', $email)) {
-        if (substr($email, -4) !== '.com') {
-            return false; // Nếu email không kết thúc bằng .com, trả về false
-        }
-        return true;
+    // Kiểm tra email có phải là định dạng hợp lệ và kết thúc bằng 'gmail.com'
+    if (preg_match('/^[a-zA-Z0-9._%+-]+@gmail\.com$/', $email)) {
+        return true;  // Nếu email đúng định dạng và kết thúc bằng gmail.com
     }
-    return false; // Trả về false nếu email không khớp với định dạng cơ bản
+    return false;  // Nếu không phải email hợp lệ hoặc không kết thúc bằng gmail.com
 }
+
 // Tổng người dùng
 function getTotalUser($conn) {
     $query = "SELECT COUNT(*) as total_users FROM users";
